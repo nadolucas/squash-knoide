@@ -1,0 +1,87 @@
+ // LEITURA DAS COLUNAS         
+for c = 0 to 9  //Coluna
+
+   ind = 0
+   
+   for l = 0 to 6  // Linha
+      
+      valor = matriz(l,c);
+      
+      if ind = 0 then
+         vetor[ind] = valor;
+      else
+      
+         if vetor[ind - 1] = valor then
+            vetor[ind] = valor;
+         else
+         
+            for r = ind - 1 to 0
+               vetor[r].remove();
+            next
+            
+            ind = 0
+            
+            vetor[ind] = valor;
+            
+         end if;
+         
+      end if;
+         
+      ind++;
+  next          
+
+  if vetor.lenght >= 3 and vetor.lenght <= 5 then
+  
+     for i = 0 to vetor.lenght - 1
+     
+        imagem[i].ativa = false;
+     
+     next
+     
+  end if;
+
+next
+
+ // LEITURA DAS LINHAS         
+for l = 0 to 6  //Linha
+
+   ind = 0
+   
+   for c = 0 to 9  //Coluna
+      
+      valor = matriz(l,c);
+      
+      if ind = 0 then
+         vetor[ind] = valor;
+      else
+      
+         if vetor[ind - 1] = valor then
+            vetor[ind] = valor;
+         else
+         
+            for r = ind - 1 to 0
+               vetor[r].remove();
+            next
+            
+            ind = 0
+            
+            vetor[ind] = valor;
+            
+         end if;
+         
+      end if;
+         
+      ind++;
+  next          
+
+  if vetor.lenght >= 3 and vetor.lenght <= 5 then
+  
+     for i = 0 to vetor.lenght - 1
+     
+        imagem[i].ativa = false;
+     
+     next
+     
+  end if;
+
+next

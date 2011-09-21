@@ -16,27 +16,21 @@ namespace SquirrelAdventures
         Rectangle jogador;
         Texture2D imagem;
         KeyboardState tecladoAtual, tecladoAnterior;
-        Vector2 origemXY;
-
+        
         enum Direcao { DIREITA, ESQUERDA }
         Direcao direcao;
         Direcao direcaoAnt;
 
-        Vector2 posicaoJog = new Vector2(100, 400);
-
-        float orientacao;
-
-
-        public Personagem(Rectangle jogador)
+        public Personagem( Texture2D imagem)
         {
-            this.jogador = jogador;
-            this.origemXY = new Vector2(jogador.X, jogador.Y);
+            this.imagem = imagem;
+            this.jogador = new Rectangle(350,500,imagem.Width, imagem.Height);
             
         }
         
-        public void Load(Texture2D imagem)
+        public Rectangle GetRetangulo()
         {
-            this.imagem = imagem;
+            return jogador;
             
         }
 
@@ -44,37 +38,8 @@ namespace SquirrelAdventures
         {
             tecladoAtual = Keyboard.GetState();
 
-            #region MOVIMENTAÇÃO DO JOGADOR
-
-            direcaoAnt = direcao;
-
-            if (tecladoAtual.IsKeyDown(Keys.Right))
-            {
-                jogador.X+=5;
-                direcao = Direcao.DIREITA;
-                orientacao = 0f;
-            }
-            if (tecladoAtual.IsKeyDown(Keys.Left))
-            {
-                jogador.X-=5;
-                direcao = Direcao.ESQUERDA;
-                orientacao = 0f;
-            }
-
-            #endregion
-
-            #region COLISÃO DO JOGADOR COM A TELA
-
-            if (jogador.X > 800 - jogador.Width)
-            {
-                jogador.X = 800-jogador.Width ;
-            }
-            if (jogador.X < 0)
-            {
-                jogador.X = 0;
-            }
-
-            #endregion 
+            MovimentoBola(tecladoAtual);
+            ColisaoTela();
 
             tecladoAnterior = tecladoAtual;
         }
@@ -84,20 +49,52 @@ namespace SquirrelAdventures
             
             if (direcao == Direcao.ESQUERDA)
             {
-                //spriteBatch.Draw(imagem, jogador, jogador, Color.White, 0, origemXY, SpriteEffects.FlipHorizontally, 0.5f);
-            spriteBatch.Draw(imagem, new Rectangle((int)jogador.X, (int)jogador.Y, imagem.Width / 2, imagem.Height / 2), new Rectangle(0, 0, imagem.Width, imagem.Height), Color.White, orientacao,
-                            new Vector2(imagem.Width / 2, imagem.Height / 2), SpriteEffects.FlipHorizontally, 0);
+                spriteBatch.Draw(imagem, new Rectangle(jogador.X, jogador.Y, jogador.Width / 2, jogador.Height / 2), new Rectangle(0, 0, jogador.Width, jogador.Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0.0f);
             }
             else
-            {  
-                spriteBatch.Draw(imagem, new Rectangle((int)jogador.X, (int)jogador.Y, imagem.Width / 2, imagem.Height / 2), new Rectangle(0, 0, imagem.Width, imagem.Height), Color.White, orientacao,
-                           new Vector2(imagem.Width / 2, imagem.Height / 2), SpriteEffects.None, 0);
+            {
+                spriteBatch.Draw(imagem, new Rectangle(jogador.X, jogador.Y, jogador.Width / 2, jogador.Height / 2), new Rectangle(0, 0, jogador.Width, jogador.Height), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.0f);
             }
 
-            
+        }
 
+        #region COLISÃO DA BOLA COM A TELA
+        public void ColisaoTela()
+        {
+            if (jogador.X > 800 - jogador.Width / 2)
+            {
+                jogador.X = 800 - jogador.Width / 2;
+            }
+
+            if (jogador.X <= 0)
+            {
+                jogador.X = 0;
+            }
 
         }
+        #endregion
+
+        #region MOVIMENTAÇÃO DA BOLA
+        public void MovimentoBola(KeyboardState tecladoAtual)
+        {
+            direcaoAnt = direcao;
+
+            if (tecladoAtual.IsKeyDown(Keys.Right))
+            {
+                jogador.X += 5;
+                direcao = Direcao.DIREITA;
+
+            }
+            if (tecladoAtual.IsKeyDown(Keys.Left))
+            {
+                jogador.X -= 5;
+                direcao = Direcao.ESQUERDA;
+
+            }
+
+        }
+        #endregion
+
     }
 
    }
