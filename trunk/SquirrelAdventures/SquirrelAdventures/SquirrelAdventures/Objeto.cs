@@ -1,139 +1,57 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
 namespace SquirrelAdventures
 {
     class Objeto
     {
-        /// <summary>
-        /// Usado para verificar a posição do inimigo, se houve alguma colisão e desenhar
-        /// </summary>
-        Rectangle objeto;
+        private Texture2D imagem;
+        private Vector2 posicaoOrigem;
+        private Vector2 posicao;
+        public int pontuacao;
+        public Rectangle rect;
 
-        /// <summary>
-        /// Imagem do inimigo
-        /// </summary>
-        Texture2D imagemObjeto;
-
-        /// <summary>
-        /// Usado para verificar se o inimigo está 'ativo' (vivo ou morto), se houve alguma colisão e desenhar
-        /// </summary>
-        bool active;
-        bool tempoAcabou;
-
-        static int CIMA = 1;
-        static int BAIXO = -1;
-        static int PARADO = 0;
-        
-        /// <summary>
-        /// Usado para colocar a lista de inimigos para se movimentar para um lado ou para outro
-        /// </summary>
-        static int ladodemovimento = PARADO;
-
-        /// <summary>
-        /// Lista que representa o conjunto de inimigos
-        /// </summary>
-        public static List<Objeto> list = new List<Objeto>();
-
-        /// <summary>
-        /// Construtor que recebe a imagem e a posicao do inimigo na lista
-        /// </summary>
-        /// <param name="imagemObjeto"></param>
-        /// <param name="objeto"></param>
-        public Objeto(Texture2D imagemObjeto, Rectangle objeto)
+        public Objeto(Texture2D imagem, Vector2 posicao, Vector2 tam, int col, int lin, int pontuacao)
         {
-            this.objeto = objeto;
-            this.imagemObjeto = imagemObjeto;
-            this.active = true;//todos começam ativos
-            list.Add(this);//adicionando a lista no momento de criação
-        }
-
-        /// <summary>
-        /// Mover os objetos da lista para o lado especificado
-        /// </summary>
-        /// <param name="ladodemovimento"></param>
-        void MoverPara(int ladodemovimento)
-        {
-            this.objeto.Y += ladodemovimento;
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            //variáveis criadas AQUI no update e usadas só aqui para controlar comportamentos
-
-            int ultimovisivel = 0;// guarda o índice do último objeto da lista de inimigos visivel na DIREITA
-            bool desceremY = false;// diz se a lista inteira deve se mover para baixo naquele momento
-
-            foreach (Objeto obj in list)
-            {
-                if (obj.active)
-                {
-                    obj.MoverPara(CIMA);
-
-                }
-            }
-
-            //ultimovisivel = list.IndexOf(this);
-
-            //detecta q o ultimo visivel bateu no canto
-          /*  foreach (Objeto obj in list)
-            {
-                if (list.IndexOf(this)==ultimovisivel)
-                {
-                    if (obj.objeto.X + obj.objeto.Width > 800)
-                    {
-                        if (obj.active)
-                        {
-                            ladodemovimento = BAIXO;
-                            obj.active = false;//TESTE REMOVER COLOCAR NAO ATIVO QUANDO RECEBER TIRO
-                            
-                        }
-                    }
-                }
-            }
-
-            //detecta q o primeiro visivel bateu no canto da esquerda
-            foreach (Enemy enemy in list)
-            {
-                if (enemy.active)
-                {
-                    if (enemy.colisionEnemy.X < 0)
-                    {
-                        ladodemovimento = DIREITA;
-                        desceremY = true;
-                        enemy.active = false;//TESTE REMOVER COLOCAR NAO ATIVO QUANDO RECEBER TIRO
-                        REBATIDAS++;
-                    }
-                }
-            }
-
-            if (desceremY)
-            {
-                foreach (Enemy enemy in list)
-                {
-                    enemy.colisionEnemy.Y += 10;
-                }
-            }*/
+            // TODO: Construct any child components here
+            this.imagem = imagem;
+            this.posicaoOrigem = new Vector2(posicao.X + (tam.X * col) + ((tam.X - imagem.Width) / 2), posicao.Y + tam.Y * lin);
+            this.posicao = this.posicaoOrigem;
+            this.pontuacao = pontuacao;
+            this.rect = new Rectangle((int)this.posicao.X, (int)this.posicao.Y, this.imagem.Width, this.imagem.Height);
 
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+
+        public void ajustaOffSet(Vector2 newOffSet)
         {
-            //for (int i = 0; i < list.Count; i++)
-            foreach (Objeto obj in list)
-            {
-                if (obj.active)
-                spriteBatch.Draw(obj.imagemObjeto, obj.objeto, Color.White);
-            }
+            this.posicaoOrigem.X += newOffSet.X;
+            this.posicaoOrigem.Y += newOffSet.Y;
+        }
+
+        public void update(GameTime gameTime, Vector2 newPos)
+        {
+            this.posicao.X = this.posicaoOrigem.X + newPos.X;
+            this.posicao.Y = this.posicaoOrigem.Y + newPos.Y;
+            this.rect = new Rectangle((int)this.posicao.X, (int)this.posicao.Y, this.imagem.Width, this.imagem.Height);
+        }
+
+        public void draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(this.imagem, this.posicao,
+                                       new Rectangle(0, 0, this.imagem.Bounds.Width,
+                                       this.imagem.Bounds.Height),
+                                       Color.White, 0f, Vector2.Zero,
+                                       1f,
+                                       SpriteEffects.None,
+                                       0.1f
+                                       );
         }
     }
 
 }
+
+
+
+
