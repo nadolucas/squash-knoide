@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,8 +13,11 @@ namespace SquirrelAdventures
         private Vector2 posicao;
         public int pontuacao;
         public Rectangle rect;
+        public bool ativo = true;
 
-        public Objeto(Texture2D imagem, Vector2 posicao, Vector2 tam, int col, int lin, int pontuacao)
+        int cor;
+
+        public Objeto(Texture2D imagem, Vector2 posicao, Vector2 tam, int col, int lin, int pontuacao, int cor)
         {
             // TODO: Construct any child components here
             this.imagem = imagem;
@@ -20,6 +25,7 @@ namespace SquirrelAdventures
             this.posicao = this.posicaoOrigem;
             this.pontuacao = pontuacao;
             this.rect = new Rectangle((int)this.posicao.X, (int)this.posicao.Y, this.imagem.Width, this.imagem.Height);
+            this.cor = cor;
 
         }
 
@@ -39,15 +45,65 @@ namespace SquirrelAdventures
 
         public void draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(this.imagem, this.posicao,
-                                       new Rectangle(0, 0, this.imagem.Bounds.Width,
-                                       this.imagem.Bounds.Height),
-                                       Color.White, 0f, Vector2.Zero,
-                                       1f,
-                                       SpriteEffects.None,
-                                       0.1f
-                                       );
+
+            if (ativo)
+            {
+                spriteBatch.Draw(this.imagem, this.posicao,
+                                           new Rectangle(0, 0, this.imagem.Bounds.Width,
+                                           this.imagem.Bounds.Height),
+                                           Color.White, 0f, Vector2.Zero,
+                                           1f,
+                                           SpriteEffects.None,
+                                           0.1f
+                                           );
+            }
         }
+
+
+        
+        public Rectangle GetRetangulo()
+        {
+            return rect;
+
+        }
+
+        public Texture2D GetImagem()
+        {
+            return this.imagem;
+
+        }
+
+        #region propriedades
+        public bool Ativo
+        {
+            set
+            {
+                ativo = value;
+            }
+
+            get
+            {
+                return ativo;
+            }
+
+        }
+
+        public int Cor
+        {
+            set
+            {
+                cor = value;
+            }
+
+            get
+            {
+                return cor;
+            }
+
+        }
+        #endregion
+
+
     }
 
 }

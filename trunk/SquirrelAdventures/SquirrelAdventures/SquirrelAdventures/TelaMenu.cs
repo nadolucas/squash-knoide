@@ -12,15 +12,10 @@ namespace SquirrelAdventures
         private Texture2D botao, botaoAjuda, botaoCredito, botaoFim;
         private Texture2D ponteiroMouse;
         private Vector2 posicaoMouseXY = Vector2.Zero;
-        private int statusBotao;
+        private int statusBotaoStart, statusBotaoAjuda, statusBotaoCreditos, statusBotaoFim;
 
         Mensagem mensagem;
 
-        /// <summary>
-        /// construtor
-        /// </summary>
-        /// <param name="telaAbertura"></param>
-        /// <param name="render"></param>
         public TelaMenu(Texture2D telaMenu, Texture2D botao, Texture2D botaoAjuda, Texture2D botaoCredito, Texture2D botaoFim, SpriteBatch render)
         {
             this.telaMenu = telaMenu;
@@ -37,14 +32,6 @@ namespace SquirrelAdventures
         public void setaImnagemMouse(Texture2D imagem)
         {
             ponteiroMouse = imagem;
-        }
-
-        /// <summary>
-        /// inicializa comportamento
-        /// </summary>
-        public void inicializa()
-        {
-            
         }
 
         public Mensagem mensagemMenu
@@ -70,7 +57,7 @@ namespace SquirrelAdventures
             #region botao start
             if ((posicaoMouseXY.X > 320 && posicaoMouseXY.X < 320 + 200) && (posicaoMouseXY.Y > 300 && posicaoMouseXY.Y < 300 + 50))
             {
-                statusBotao = 1;
+                statusBotaoStart = 1;
 
                 if (mouse.LeftButton == ButtonState.Pressed)
                 {
@@ -85,7 +72,7 @@ namespace SquirrelAdventures
                 #region botao ajuda
                 if ((posicaoMouseXY.X > 320 && posicaoMouseXY.X < 320 + 200) && (posicaoMouseXY.Y > 360 && posicaoMouseXY.Y < 360 + 50))
                 {
-                    statusBotao = 1;
+                    statusBotaoAjuda = 1;
 
                     if (mouse.LeftButton == ButtonState.Pressed)
                     {
@@ -100,7 +87,7 @@ namespace SquirrelAdventures
                     #region botao creditos
                     if ((posicaoMouseXY.X > 320 && posicaoMouseXY.X < 320 + 200) && (posicaoMouseXY.Y > 420 && posicaoMouseXY.Y < 420 + 50))
                     {
-                        statusBotao = 1;
+                        statusBotaoCreditos = 1;
 
                         if (mouse.LeftButton == ButtonState.Pressed)
                         {
@@ -115,7 +102,7 @@ namespace SquirrelAdventures
                         #region botao sair
                         if ((posicaoMouseXY.X > 320 && posicaoMouseXY.X < 320 + 200) && (posicaoMouseXY.Y > 480 && posicaoMouseXY.Y < 480 + 50))
                         {
-                            statusBotao = 1;
+                            statusBotaoFim = 1;
 
                             if (mouse.LeftButton == ButtonState.Pressed)
                             {
@@ -127,7 +114,10 @@ namespace SquirrelAdventures
                         #endregion
                         else
                         {
-                            statusBotao = 0;
+                            statusBotaoStart = 0;
+                            statusBotaoAjuda = 0;
+                            statusBotaoCreditos = 0;
+                            statusBotaoFim = 0;
                         }
                     }
                 }
@@ -139,16 +129,13 @@ namespace SquirrelAdventures
         {
 
             render.Draw(telaMenu, new Rectangle(0, 0, 800, 600), Color.White);
-            render.Draw(botao, new Vector2(320, 300), new Rectangle(200 * statusBotao, 0, 200, 50), Color.White);
-            render.Draw(botaoAjuda, new Vector2(320, 360), new Rectangle(200 * statusBotao, 0, 200, 50), Color.White);
-            render.Draw(botaoCredito, new Vector2(320, 420), new Rectangle(200 * statusBotao, 0, 200, 50), Color.White);
-            render.Draw(botaoFim, new Vector2(320, 480), new Rectangle(200 * statusBotao, 0, 200, 50), Color.White);
+            render.Draw(botao, new Vector2(320, 300), new Rectangle(200 * statusBotaoStart, 0, 200, 50), Color.White);
+            render.Draw(botaoAjuda, new Vector2(320, 360), new Rectangle(200 * statusBotaoAjuda, 0, 200, 50), Color.White);
+            render.Draw(botaoCredito, new Vector2(320, 420), new Rectangle(200 * statusBotaoCreditos, 0, 200, 50), Color.White);
+            render.Draw(botaoFim, new Vector2(320, 480), new Rectangle(200 * statusBotaoFim, 0, 200, 50), Color.White);
             render.Draw(ponteiroMouse, posicaoMouseXY, Color.White);
         }
 
-
-
-        public Rectangle posicaoXYPersonagem { get; set; }
     }
 
 }
