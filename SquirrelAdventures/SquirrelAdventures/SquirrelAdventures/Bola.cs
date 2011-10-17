@@ -187,6 +187,193 @@ namespace SquirrelAdventures
         }
         #endregion
 
+        #region COLISÃO DA BOLA COM OS OBJETOS
+        public void ColisaoObjeto(int colObjetos, int linObjetos, List<Objeto> objetos)
+        {
+            bool colidiu = false;
+
+            Rectangle objeto;
+            Texture2D imgObjeto;
+
+            Color[] dadosTexturaBola;
+
+            dadosTexturaBola = new Color[imagem.Width * imagem.Height];
+            imagem.GetData(dadosTexturaBola);
+    
+            for (int ind = 0; ind < objetos.Count(); ind++)
+            {
+
+                objeto = objetos[ind].GetRetangulo();
+                imgObjeto = objetos[ind].GetImagem();
+                
+                Color[] dadosTexturaObjeto;
+
+                dadosTexturaObjeto = new Color[imgObjeto.Width * imgObjeto.Height];
+                imgObjeto.GetData(dadosTexturaObjeto);
+
+                int cima = Math.Max((int)(bola.Top / 2), (int)(objeto.Top / 2));
+                int baixo = Math.Min((int)(bola.Bottom / 2), (int)(objeto.Bottom / 2));
+                int esquerda = Math.Max((int)(bola.Left / 2), (int)(objeto.Left / 2));
+                int direita = Math.Min((int)(bola.Right / 2), (int)(objeto.Right / 2));
+
+                for (int y = cima; y < baixo; y++)
+                {
+                    for (int x = esquerda; x < direita; x++)
+                    {
+                        Color color1 = dadosTexturaBola[(x - (int)(bola.Left / 2)) + (y - (int)(bola.Top / 2)) * (int)(bola.Width / 2)];
+                        Color color2 = dadosTexturaObjeto[(x - (int)(objeto.Left / 2)) + (y - (int)(objeto.Top / 2)) * (int)(objeto.Width / 2)];
+                        
+                        if (color1.A != 0 && color2.A != 0)
+                        {
+                            colidiu = true;
+
+                            imgObjeto.SetData(dadosTexturaBola);
+                            imagem.SetData(dadosTexturaObjeto);
+
+
+
+                        }
+
+                    }
+                }
+
+
+                if (colidiu)
+                {
+
+                    //validaCorObjeto(colObjetos, linObjetos, objetos);
+
+                    if (direcao == Direcao.DIAGINFESQ)
+                    {
+                        direcao = Direcao.DIAGSUPESQ;
+                    }
+
+                    if (direcao == Direcao.DIAGINFDIR)
+                    {
+                        direcao = Direcao.DIAGSUPDIR;
+                    }
+
+                    if (direcao == Direcao.BAIXO)
+                    {
+                        direcao = Direcao.CIMA;
+                    }
+
+                }
+            }
+
+        }
+
+        public void validaCorObjeto(List<Objeto> objetos)
+        {
+
+            bool colidiu = false;
+
+            Rectangle objeto;
+            Texture2D imgObjeto;
+
+            Color[] dadosTexturaBola;
+
+            dadosTexturaBola = new Color[imagem.Width * imagem.Height];
+            imagem.GetData(dadosTexturaBola);
+
+            for (int ind = 0; ind < objetos.Count(); ind++)
+            {
+
+                objeto = objetos[ind].GetRetangulo();
+                imgObjeto = objetos[ind].GetImagem();
+
+                Color[] dadosTexturaObjeto;
+
+                dadosTexturaObjeto = new Color[imgObjeto.Width * imgObjeto.Height];
+                imgObjeto.GetData(dadosTexturaObjeto);
+
+                int cima = Math.Max((int)(bola.Top / 2), (int)(objeto.Top / 2));
+                int baixo = Math.Min((int)(bola.Bottom / 2), (int)(objeto.Bottom / 2));
+                int esquerda = Math.Max((int)(bola.Left / 2), (int)(objeto.Left / 2));
+                int direita = Math.Min((int)(bola.Right / 2), (int)(objeto.Right / 2));
+
+                for (int y = cima; y < baixo; y++)
+                {
+                    for (int x = esquerda; x < direita; x++)
+                    {
+                        Color color1 = dadosTexturaBola[(x - (int)(bola.Left / 2)) + (y - (int)(bola.Top / 2)) * (int)(bola.Width / 2)];
+                        Color color2 = dadosTexturaObjeto[(x - (int)(objeto.Left / 2)) + (y - (int)(objeto.Top / 2)) * (int)(objeto.Width / 2)];
+
+                        if (color1.A != 0 && color2.A != 0)
+                        {
+                            colidiu = true;
+
+
+
+
+
+                        }
+
+                    }
+                }
+
+
+
+                /*int[,,] obj = new int[linObjetos, colObjetos,objetos.Count()];
+
+                int cor = 0;
+                int corAnt = 0;
+                int indice = 0;
+                int conta = 0;
+
+                int[] indices = new int[objetos.Count()];
+
+                for (int ind = 0; ind < objetos.Count(); ind++)
+                {
+
+                    for (int lin = 0; lin < linObjetos; lin++)
+                    {
+
+                        for (int col = 0; col < colObjetos; col++)
+                        {
+                            obj[lin, col, ind] = objetos[ind].Cor;
+                        }
+
+                    }
+
+                }
+
+                for (int lin = 0; lin < linObjetos; lin++)
+                {
+
+                    for (int col = 0; col < colObjetos; col++)
+                    {
+                        cor = obj[lin, col, indice];
+
+                        if (cor == corAnt)
+                        {
+                            conta++;
+                        }
+                        else
+                        {
+
+                            if (conta >= 3)
+                            {
+                                indices[indice
+                        
+                            conta = 0;
+                        }
+
+                    
+
+
+                        indice++;
+                        corAnt = cor;
+                    }
+
+                }*/
+            }
+                    
+        }
+
+
+        #endregion
+
         #region MOVIMENTAÇÃO DA BOLA
         public void MovimentoBola(KeyboardState tecladoAtual)
         {

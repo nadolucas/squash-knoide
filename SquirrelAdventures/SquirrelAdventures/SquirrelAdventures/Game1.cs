@@ -26,7 +26,10 @@ namespace SquirrelAdventures
         Vector2 posicaoJog = new Vector2(100, 100);
 
         Bola bola;
-        const int COL_OBJETOS = 14;
+
+        Objeto objeto;
+
+        const int COL_OBJETOS = 13;
         const int LIN_OBJETOS = 4;
         const int OBJETO_SIZE_X = 60;
         const int OBJETO_SIZE_Y = 40;
@@ -116,10 +119,7 @@ namespace SquirrelAdventures
             bola = new Bola(imagemBola);
             #endregion
 
-            #region Objeto
-            CarregaObjetos();
-            #endregion
-
+            
         }
 
 
@@ -134,6 +134,19 @@ namespace SquirrelAdventures
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            { menu.mensagemMenu = Mensagem.TELA_MENU; }
+
+            #region Apenas para testes
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            { menu.mensagemMenu = Mensagem.FASE_1; }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.B))
+            { menu.mensagemMenu = Mensagem.FASE_2; }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.C))
+            { menu.mensagemMenu = Mensagem.FASE_3; }
+            #endregion
             switch (menu.mensagemMenu)
             {
                 case Mensagem.TELA_MENU:
@@ -149,13 +162,14 @@ namespace SquirrelAdventures
                     this.Exit();
                     break;
 
-
             }
 
 
             jogador.Update(gameTime);
 
             retJogador = jogador.GetRetangulo();
+
+            //bola.ColisaoObjeto(LIN_OBJETOS, COL_OBJETOS, objetos);
 
             bola.ColisaoJogador(retJogador, imagemJog);
 
@@ -180,14 +194,34 @@ namespace SquirrelAdventures
                     jogador.Draw(spriteBatch);
                     bola.Draw(spriteBatch);
 
+                    CarregaObjetos();
+
                     foreach (Objeto obj in objetos)
                     {
                         obj.draw(gameTime, spriteBatch);
                     }
                     break;
                 case Mensagem.FASE_2:
+                    jogador.Draw(spriteBatch);
+                    bola.Draw(spriteBatch);
+
+                    CarregaObjetos();
+
+                    foreach (Objeto obj in objetos)
+                    {
+                        obj.draw(gameTime, spriteBatch);
+                    }
                     break;
                 case Mensagem.FASE_3:
+                    jogador.Draw(spriteBatch);
+                    bola.Draw(spriteBatch);
+
+                    CarregaObjetos();
+
+                    foreach (Objeto obj in objetos)
+                    {
+                        obj.draw(gameTime, spriteBatch);
+                    }
                     break;
                 case Mensagem.TELA_AJUDA:
                     ajuda.draw(gameTime, spriteBatch);
@@ -209,36 +243,65 @@ namespace SquirrelAdventures
         private void CarregaObjetos()
         {
             Random rnd = new Random();
+            int[,] corLinha = new int[LIN_OBJETOS, COL_OBJETOS];
 
+            int cor = 0;
+            
+
+            switch (menu.mensagemMenu)
+            {
+                case Mensagem.FASE_1:
+                    cor = 0;
+                    break;
+                case Mensagem.FASE_2:
+                    cor = 1;
+                    break;
+                case Mensagem.FASE_3:
+                    cor = 2;
+                    break;
+            }
+            
             for (int lin = 0; lin < LIN_OBJETOS; lin++)
             {
+                
                 for (int col = 0; col < COL_OBJETOS; col++)
                 {
+
+                    //corLinha[lin, col] = cor;
 
                     int p = 10;
                     if (lin == 0) { p = 30; }
                     if (lin == 1) { p = 20; }
-
-                    int cor = rnd.Next(0, 3);
-
+                    
                     switch (cor)
                     {
                         case 0://Vermelho
-                            objetos.Add(new Objeto(Content.Load<Texture2D>("quadVermelho"), new Vector2(objetoBlocoBound.X, objetoBlocoBound.Y), new Vector2(OBJETO_SIZE_X, OBJETO_SIZE_Y), col, lin, p));
+                            objetos.Add(new Objeto(Content.Load<Texture2D>("quadVermelho"), new Vector2(objetoBlocoBound.X, objetoBlocoBound.Y), new Vector2(OBJETO_SIZE_X, OBJETO_SIZE_Y), col, lin, p, cor));
                             break;
                         case 1: //Azul
-                            objetos.Add(new Objeto(Content.Load<Texture2D>("quadAzul"), new Vector2(objetoBlocoBound.X, objetoBlocoBound.Y), new Vector2(OBJETO_SIZE_X, OBJETO_SIZE_Y), col, lin, p));
+                            objetos.Add(new Objeto(Content.Load<Texture2D>("quadAzul"), new Vector2(objetoBlocoBound.X, objetoBlocoBound.Y), new Vector2(OBJETO_SIZE_X, OBJETO_SIZE_Y), col, lin, p, cor));
                             break;
                         case 2: //Amarelo
-                            objetos.Add(new Objeto(Content.Load<Texture2D>("quadAmarelo"), new Vector2(objetoBlocoBound.X, objetoBlocoBound.Y), new Vector2(OBJETO_SIZE_X, OBJETO_SIZE_Y), col, lin, p));
+                            objetos.Add(new Objeto(Content.Load<Texture2D>("quadAmarelo"), new Vector2(objetoBlocoBound.X, objetoBlocoBound.Y), new Vector2(OBJETO_SIZE_X, OBJETO_SIZE_Y), col, lin, p, cor));
                             break;
                         case 3: //Verde
-                            objetos.Add(new Objeto(Content.Load<Texture2D>("quadVerde"), new Vector2(objetoBlocoBound.X, objetoBlocoBound.Y), new Vector2(OBJETO_SIZE_X, OBJETO_SIZE_Y), col, lin, p));
+                            objetos.Add(new Objeto(Content.Load<Texture2D>("quadVerde"), new Vector2(objetoBlocoBound.X, objetoBlocoBound.Y), new Vector2(OBJETO_SIZE_X, OBJETO_SIZE_Y), col, lin, p, cor));
                             break;
                     }
-
+                    
+                    if (cor == 3)
+                    {
+                        cor = 0;
+                    }
+                    else
+                    {
+                        cor++;
+                    }
+                    
                 }
+                
             }
+
         }
     }
 }
